@@ -90,7 +90,5 @@ let displayRepos = function(repos, searchTerm) {
 };
 
 
-getUserRepos("microsoft");
-
 
 userFormEl.addEventListener("submit", formSubmitHandler);
