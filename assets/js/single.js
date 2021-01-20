@@ -1,5 +1,5 @@
 let issueContainerEl = document.querySelector("#issues-container");
-
+let limitWarningEl = document.querySelector("#limit-warning");
 
 
 let getRepoIssues = function(repo) {
@@ -10,7 +10,11 @@ let getRepoIssues = function(repo) {
           response.json().then(function(data) {
             // pass response data to a DOM function
             displayIssues(data);
-            console.log(data);
+
+            // check if API has paginated issues
+            if (response.headers.get("Link")) {
+                displayWarning(repo);
+            }
           });
         }
         else {
@@ -18,7 +22,7 @@ let getRepoIssues = function(repo) {
         }
       });
     };
-getRepoIssues("nystphens/git-it-done");
+getRepoIssues("facebook/react");
 
 
 let displayIssues = function(issues) {
@@ -56,4 +60,18 @@ let displayIssues = function(issues) {
 
         issueContainerEl.appendChild(issueEl);
     }
+};
+
+
+let displayWarning = function(repo) {
+    // add text to warning container
+    limitWarningEl.textContent = "To see more then 30 issues, visit ";
+
+    let linkEl = document.createElement("a");
+    linkEl.textContent = "See More Issues on GitHub.com";
+    linkEl.setAttribute("href", "https://github.com/" + repo + "/issues");
+    linkEl.setAttribute("target", "_blank");
+
+    // append warning to container
+    limitWarningEl.appendChild(linkEl);
 };
